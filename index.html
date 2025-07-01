@@ -1147,6 +1147,7 @@
     </style>
 </head>
 <body>
+    <!-- Login Container -->
     <div id="loginContainer" class="login-container">
         <div class="login-card">
             <div class="login-logo">#theProgram</div>
@@ -1198,7 +1199,9 @@
         </div>
     </div>
 
+    <!-- Main App Container -->
     <div id="appContainer" style="display: none;">
+        <!-- Navigation -->
         <nav>
             <div class="nav-container">
                 <a href="#" class="logo">#theProgram</a>
@@ -1225,7 +1228,9 @@
             </div>
         </nav>
 
+        <!-- Main Content -->
         <main class="main-container">
+            <!-- Dashboard View -->
             <div id="dashboardView" class="view-content active">
                 <div class="dashboard-grid">
                     <aside>
@@ -1252,6 +1257,7 @@
                         <div class="loading">Loading recent activity...</div>
                     </section>
                     <aside>
+                        <!-- Top Members This Month -->
                         <div class="sidebar-section">
                             <h3 class="sidebar-title">Top Members This Month</h3>
                             <div id="topMembersList">
@@ -1259,6 +1265,7 @@
                             </div>
                         </div>
                         
+                        <!-- Monthly Stats -->
                         <div class="sidebar-section">
                             <h3 class="sidebar-title">This Month's Stats</h3>
                             <div class="monthly-stats">
@@ -1280,10 +1287,12 @@
                 </div>
             </div>
 
+            <!-- Workouts View -->
             <div id="workoutsView" class="view-content">
                 <div class="workouts-header">
                     <h1>Workouts</h1>
                     
+                    <!-- Filters -->
                     <div class="workouts-filters">
                         <div class="filter-group">
                             <label class="filter-label">Search</label>
@@ -1314,6 +1323,7 @@
                         </div>
                     </div>
 
+                    <!-- Stats -->
                     <div class="workouts-stats" id="workoutStats">
                         <div class="stat-card">
                             <span class="stat-value" id="totalWorkoutsCount">-</span>
@@ -1339,6 +1349,7 @@
                 </div>
             </div>
 
+            <!-- Members View -->
             <div id="membersView" class="view-content">
                 <div class="members-header">
                     <h1>Members</h1>
@@ -1350,11 +1361,14 @@
             </div>
         </main>
 
+        <!-- Floating Action Button -->
         <button class="fab" onclick="showAddWorkout()">+</button>
 
+        <!-- Admin Hint (shows briefly on page load) -->
         <div class="admin-hint" id="adminHint">Press F2 for admin settings | F3 to test connection | F4 for debug info</div>
     </div>
 
+    <!-- Debug Panel -->
     <div id="debugPanel" class="debug-panel">
         <div style="font-weight: bold; margin-bottom: 8px;">Debug Info:</div>
         <div class="debug-info"><strong>Script URL:</strong> <span id="debugScriptUrl">Not set</span></div>
@@ -1366,6 +1380,7 @@
         <div id="debugTestResult" class="test-result" style="display: none;"></div>
     </div>
 
+    <!-- Add Workout Modal -->
     <div id="addWorkoutModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1443,6 +1458,7 @@
         </div>
     </div>
 
+    <!-- Add Member Modal -->
     <div id="addMemberModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1510,6 +1526,7 @@
         </div>
     </div>
 
+    <!-- Workout Details Modal -->
     <div id="workoutDetailsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1849,42 +1866,16 @@
             showSettings();
         }
 
-        // Update UI for current user - FIXED VERSION
+        // Update UI for current user
         function updateUIForUser() {
-            const name = `${currentUserData.firstName} ${currentUserData.lastName}`;
-            const initials = getInitials(name);
+            const initials = getInitials(`${currentUserData.firstName} ${currentUserData.lastName}`);
             const picUrl = currentUserData.profilePictureURL;
-
-            // Select both avatar elements
-            const navAvatar = document.getElementById('navUserAvatar');
-            const dashboardAvatar = document.getElementById('userAvatar');
-
-            // This is a more robust helper function to set the avatar
-            function setAvatar(element, url, text) {
-                // Always start by clearing previous content
-                element.innerHTML = ''; 
-                
-                // Check for a valid, non-empty URL
-                if (url && url.startsWith('http')) {
-                    // Create a new image element
-                    const img = document.createElement('img');
-                    img.src = url;
-                    img.alt = text;
-                    // Append the new image
-                    element.appendChild(img);
-                } else {
-                    // If no valid URL, just show the initials as text
-                    element.textContent = text;
-                }
-            }
-
-            // Update both the navigation and dashboard avatars
-            setAvatar(navAvatar, picUrl, initials);
-            setAvatar(dashboardAvatar, picUrl, initials);
-
-            // Update the user's name in the UI
-            document.getElementById('navUserName').textContent = name;
-            document.getElementById('userName').textContent = name;
+            const avatarHtml = picUrl ? `<img src="${picUrl}" alt="${initials}">` : initials;
+            
+            document.getElementById('navUserAvatar').innerHTML = avatarHtml;
+            document.getElementById('userAvatar').innerHTML = avatarHtml;
+            document.getElementById('navUserName').textContent = `${currentUserData.firstName} ${currentUserData.lastName}`;
+            document.getElementById('userName').textContent = `${currentUserData.firstName} ${currentUserData.lastName}`;
         }
 
         // View switching
