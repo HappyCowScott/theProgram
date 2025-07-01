@@ -60,10 +60,10 @@
             background: #3674b5;
             color: white;
         }
-        /* New Dashboard Layout */
+        /* Dashboard Layout */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 300px 1fr; /* Left column for stats, right for feed */
+            grid-template-columns: 1fr 2fr; /* 1/3 and 2/3 width */
             gap: 24px;
             align-items: start;
         }
@@ -115,7 +115,7 @@
             font-size: 14px;
             color: #606065;
         }
-        /* Simple Activity Feed */
+        /* Activity Feed */
         .activity-feed {
             display: flex;
             flex-direction: column;
@@ -214,7 +214,8 @@
     </div>
     
     <script>
-        // Dummy data for demonstration
+        // NOTE: This script uses dummy data for demonstration.
+        // Your real app would connect to your Google Apps Script.
         const members = [{id: 999, firstName: 'Scott', lastName: 'Metcalf', profilePictureURL: ''}];
         const workouts = [
             {id: 1, trainer: 'Scott Metcalf', notes: 'Strength Workout', date: '2025-07-01', time: '08:00', workoutPictureURL: ''},
