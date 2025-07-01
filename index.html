@@ -48,6 +48,13 @@
             color: #2d3134;
             text-decoration: none;
             font-size: 16px;
+            padding: 16px 0;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+        }
+        .nav-link.active {
+            color: #3674b5;
+            border-bottom-color: #3674b5;
         }
         .btn {
             padding: 10px 20px;
@@ -143,7 +150,6 @@
             color: #606065;
             margin-bottom: 16px;
         }
-        /* New styles for participants list */
         .participants-section {
             margin-top: 16px;
             padding-top: 16px;
@@ -153,7 +159,6 @@
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #2d3134;
         }
         .participants-list {
             list-style: none;
@@ -171,12 +176,20 @@
         }
         .view-content { display: none; }
         .view-content.active { display: block; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
-        .modal.active { display: flex; }
-        .modal-content { background: white; padding: 24px; border-radius: 8px; width: 90%; max-width: 600px; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .modal-title { font-size: 24px; }
-        .modal-close { font-size: 24px; background: none; border: none; cursor: pointer; }
+
+        /* Members & Workouts Grid */
+        .content-grid {
+             display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .member-card, .workout-tile {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
     </style>
 </head>
 <body>
@@ -190,7 +203,7 @@
                     <a href="#" class="nav-link" onclick="showView('workouts')">Workouts</a>
                     <a href="#" class="nav-link" onclick="showView('members')">Members</a>
                 </div>
-                <button class="btn btn-primary" onclick="showAddWorkout()">Add Workout</button>
+                <button class="btn btn-primary">Add Workout</button>
             </div>
         </nav>
 
@@ -217,33 +230,28 @@
                             </div>
                         </div>
                     </aside>
-                    <section id="activityFeed" class="activity-feed">
-                        </section>
+                    <section id="activityFeed" class="activity-feed"></section>
                 </div>
             </div>
 
-            <div id="workoutsView" class="view-content"><h2>Workouts</h2></div>
-            <div id="membersView" class="view-content"><h2>Members</h2></div>
-        </main>
-    </div>
-
-    <div id="addWorkoutModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Add New Workout</h2>
-                <button class="modal-close" onclick="closeModal('addWorkoutModal')">&times;</button>
+            <div id="workoutsView" class="view-content">
+                <h2>All Workouts</h2>
+                <div id="workoutsList" class="content-grid" style="margin-top: 16px;"></div>
             </div>
-            <p>Your "Add Workout" form would go here.</p>
-        </div>
+
+            <div id="membersView" class="view-content">
+                <h2>All Members</h2>
+                <div id="membersList" class="content-grid" style="margin-top: 16px;"></div>
+            </div>
+        </main>
     </div>
     
     <script>
-        // NOTE: This script uses dummy data for demonstration.
-        // Your real app would connect to your Google Apps Script.
+        // Dummy data for demonstration. Your app will use data from your script.
         const members = [
-            {id: 999, firstName: 'Scott', lastName: 'Metcalf', profilePictureURL: ''},
-            {id: 101, firstName: 'Charlie', lastName: 'Handsome', profilePictureURL: ''},
-            {id: 102, firstName: 'Parker', lastName: 'Posey', profilePictureURL: ''}
+            {id: 999, firstName: 'Scott', lastName: 'Metcalf', profilePictureURL: '', status: 'Active', joinDate: '2024-01-01'},
+            {id: 101, firstName: 'Charlie', lastName: 'Handsome', profilePictureURL: '', status: 'Active', joinDate: '2024-03-15'},
+            {id: 102, firstName: 'Parker', lastName: 'Posey', profilePictureURL: '', status: 'Inactive', joinDate: '2024-05-20'}
         ];
         const workouts = [
             {id: 1, trainer: 'Scott Metcalf', notes: 'Strength Workout', date: '2025-07-01', time: '08:00', workoutPictureURL: '', participants: ['Charlie Handsome', 'Parker Posey'], participantCount: 2},
@@ -251,10 +259,34 @@
         ];
         const currentUserData = members[0];
 
+        // --- Main App Logic ---
+
         function showView(viewName) {
+            // Hide all views
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+            // Show the selected view
             document.getElementById(`${viewName}View`).classList.add('active');
+
+            // De-activate all nav links
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            // Activate the clicked nav link
+            document.querySelector(`.nav-link[onclick="showView('${viewName}')"]`).classList.add('active');
+
+            // Populate the view with content
+            switch(viewName) {
+                case 'dashboard':
+                    populateDashboard();
+                    break;
+                case 'workouts':
+                    populateWorkouts();
+                    break;
+                case 'members':
+                    populateMembers();
+                    break;
+            }
         }
+        
+        // --- Populate Functions ---
 
         function populateDashboard() {
             const feed = document.getElementById('activityFeed');
@@ -262,7 +294,7 @@
 
             // Populate Profile Card
             document.getElementById('userName').textContent = `${currentUserData.firstName} ${currentUserData.lastName}`;
-            const initials = (currentUserData.firstName[0] || '') + (currentUserData.lastName[0] || '');
+            const initials = getInitials(currentUserData.firstName, currentUserData.lastName);
             document.getElementById('userAvatar').textContent = initials;
             // Dummy stats
             document.getElementById('userWorkouts').textContent = '10';
@@ -274,11 +306,9 @@
                 <div class="activity-card">
                     <h3 class="activity-title">${workout.notes || 'Workout'}</h3>
                     <p class="activity-meta">
-                        Led by <strong>${workout.trainer}</strong> on ${new Date(workout.date).toLocaleDateString()}
+                        Led by <strong>${workout.trainer}</strong> on ${formatDate(workout.date)}
                     </p>
-
                     ${workout.workoutPictureURL ? `<img src="${workout.workoutPictureURL}" class="activity-card-image">` : ''}
-
                     ${workout.participantCount > 0 ? `
                         <div class="participants-section">
                             <h4>Participants (${workout.participantCount})</h4>
@@ -290,18 +320,48 @@
                 </div>
             `).join('');
         }
-        
-        // Modal helpers
-        function showAddWorkout() {
-            document.getElementById('addWorkoutModal').classList.add('active');
-        }
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+
+        function populateWorkouts() {
+            const list = document.getElementById('workoutsList');
+            list.innerHTML = workouts.map(workout => `
+                <div class="workout-tile">
+                    <h3 class="activity-title">${workout.notes || 'Workout'}</h3>
+                    <p class="activity-meta">
+                        <strong>${workout.trainer}</strong> on ${formatDate(workout.date)}
+                    </p>
+                </div>
+            `).join('');
         }
 
-        // Run on page load
+        function populateMembers() {
+            const list = document.getElementById('membersList');
+            list.innerHTML = members.map(member => `
+                 <div class="member-card">
+                    <h4>${member.firstName} ${member.lastName}</h4>
+                    <p>Status: ${member.status}</p>
+                </div>
+            `).join('');
+        }
+        
+        // --- Utility Functions ---
+
+        function getInitials(firstName, lastName) {
+            return (firstName?.[0] || '') + (lastName?.[0] || '');
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString('en-US', {
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+
+        // --- Run on page load ---
         document.addEventListener('DOMContentLoaded', () => {
-            populateDashboard();
+            // In a real app, you would fetch data here first.
+            // For this demo, we just show the dashboard.
+            showView('dashboard');
         });
     </script>
 
