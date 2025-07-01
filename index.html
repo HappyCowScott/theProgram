@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>#theProgram - Activity Feed</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background-color: #f5f5fa;
             color: #2d3134;
             line-height: 1.5;
         }
+
+        /* Navigation */
         nav {
             background: white;
             border-bottom: 1px solid #e5e5ea;
@@ -19,6 +26,7 @@
             top: 0;
             z-index: 100;
         }
+
         .nav-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -28,65 +36,291 @@
             height: 56px;
             gap: 40px;
         }
+
         .logo {
             font-size: 28px;
             font-weight: bold;
             color: #3674b5;
             text-decoration: none;
         }
+
         .nav-links {
             display: flex;
             gap: 30px;
             flex: 1;
         }
+
         .nav-link {
             color: #2d3134;
             text-decoration: none;
             font-size: 16px;
             padding: 16px 0;
             border-bottom: 2px solid transparent;
+            transition: all 0.2s;
             cursor: pointer;
         }
+
+        .nav-link:hover {
+            color: #3674b5;
+        }
+
         .nav-link.active {
             border-bottom-color: #3674b5;
             color: #3674b5;
         }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        /* Buttons */
         .btn {
             padding: 10px 20px;
             border-radius: 6px;
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
+            transition: all 0.2s;
             border: none;
+            text-decoration: none;
+            display: inline-block;
         }
+
         .btn-primary {
             background: #3674b5;
             color: white;
         }
+
+        .btn-primary:hover {
+            background: #2a5a8f;
+        }
+
+        .btn-secondary {
+            background: #e5e5ea;
+            color: #2d3134;
+        }
+
+        .btn-secondary:hover {
+            background: #d5d5da;
+        }
+
+        .btn-success {
+            background: #059669;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Login */
+        .login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f5f5fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .login-logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #3674b5;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #606065;
+            margin-bottom: 32px;
+        }
+
+        .login-error {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .login-success {
+            background: #d1fae5;
+            color: #059669;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .login-loading {
+            text-align: center;
+            color: #606065;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .troubleshooting-section {
+            background: #f5f5fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .troubleshooting-section h4 {
+            margin-bottom: 8px;
+            color: #2d3134;
+        }
+
+        .troubleshooting-section ol {
+            margin-left: 20px;
+            color: #606065;
+        }
+
+        .troubleshooting-section li {
+            margin-bottom: 4px;
+        }
+
+        .url-display {
+            background: #f5f5fa;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            margin: 8px 0;
+        }
+
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e5e5ea;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .user-button:hover {
+            border-color: #3674b5;
+        }
+
+        .user-avatar-small {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #3674b5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .user-avatar-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        .user-dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #e5e5ea;
+        }
+
+        .user-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .user-dropdown-item:hover {
+            background: #f5f5fa;
+        }
+
+        /* Main Container */
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 24px 20px;
         }
-        .view-content { display: none; }
-        .view-content.active { display: block; }
 
-        /* MODIFIED: Two-column dashboard layout */
+        /* Views */
+        .view-content {
+            display: none;
+        }
+
+        .view-content.active {
+            display: block;
+        }
+
+        /* Dashboard */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 2fr; /* Creates 1/3 and 2/3 columns */
+            grid-template-columns: 300px 1fr 300px;
             gap: 24px;
-            align-items: start;
         }
+
         .profile-card {
             background: white;
             border-radius: 8px;
             padding: 24px;
             text-align: center;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            position: sticky; /* Makes it stick on scroll */
-            top: 80px; /* Space from top nav */
+            height: fit-content;
         }
+
         .profile-avatar {
             width: 120px;
             height: 120px;
@@ -101,15 +335,19 @@
             font-weight: bold;
             overflow: hidden;
         }
+
         .profile-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
+
         .profile-name {
             font-size: 24px;
             font-weight: 600;
+            margin-bottom: 8px;
         }
+
         .profile-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -118,25 +356,44 @@
             padding-top: 24px;
             border-top: 1px solid #e5e5ea;
         }
+
         .stat-value {
             font-size: 24px;
             font-weight: 600;
+            display: block;
+            color: #3674b5;
         }
+
         .stat-label {
             font-size: 14px;
             color: #606065;
         }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        /* Activity Feed */
         .activity-feed {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
+
         .activity-card {
             background: white;
             border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
         }
+
+        .activity-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
         .activity-image-header {
             width: 100%;
             height: 200px;
@@ -144,30 +401,406 @@
             background-size: cover;
             background-position: center;
         }
+
         .activity-content {
             padding: 20px;
         }
-        .activity-title { font-size: 20px; font-weight: 600; }
+
+        .activity-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 12px;
+            color: #2d3134;
+        }
+
+        .activity-meta {
+            font-size: 14px;
+            color: #606065;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .activity-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            background: #e5e5ea;
+            color: #2d3134;
+        }
+
+        .type-strength { background: #fee2e2; color: #dc2626; }
+        .type-cardio { background: #dbeafe; color: #2563eb; }
+        .type-flexibility { background: #d1fae5; color: #059669; }
+        .type-circuit { background: #fef3c7; color: #d97706; }
+
+        /* Sidebar */
+        .sidebar-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 16px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #2d3134;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+        }
+
+        .member-item-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e5e5ea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: #606065;
+            overflow: hidden;
+        }
+
+        .member-item-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-item-info {
+            flex: 1;
+        }
+
+        .member-item-name {
+            font-weight: 500;
+            font-size: 14px;
+            color: #2d3134;
+        }
+
+        .member-item-stats {
+            font-size: 12px;
+            color: #606065;
+        }
+
+        .monthly-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .monthly-stats .stat-item {
+            text-align: center;
+        }
+
+        .monthly-stats .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #3674b5;
+            display: block;
+        }
+
+        .monthly-stats .stat-label {
+            font-size: 14px;
+            color: #606065;
+            margin-top: 4px;
+        }
+
+        .activity-participants {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e5ea;
+        }
+
+        .participants-label {
+            font-size: 14px;
+            color: #606065;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .participants-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .workout-card .participants-list {
+            gap: 6px;
+        }
+
+        .participant-chip {
+            padding: 4px 12px;
+            background: #f5f5fa;
+            border-radius: 16px;
+            font-size: 13px;
+            color: #2d3134;
+        }
+
+        .workout-card .participant-chip {
+            padding: 2px 8px;
+            font-size: 11px;
+        }
+
+        .workout-card .activity-participants {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f5f5fa;
+        }
+
+        .workout-card .participants-label {
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .workout-card .participants-list {
+            gap: 6px;
+        }
+
+        /* Workouts View */
+        .workouts-header {
+            margin-bottom: 32px;
+        }
+
+        .workouts-header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2d3134;
+            margin-bottom: 24px;
+        }
+
+        .workouts-filters {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #606065;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-select,
+        .filter-input {
+            padding: 8px 12px;
+            border: 1px solid #e5e5ea;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .workouts-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #3674b5;
+            display: block;
+        }
+
+        .stat-card .stat-label {
+            font-size: 14px;
+            color: #606065;
+            margin-top: 4px;
+        }
+
+        .workouts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .workout-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .workout-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .workout-card-image {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .workout-card-type {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .workout-card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .workout-card-date {
+            font-size: 12px;
+            color: #606065;
+            margin-bottom: 8px;
+        }
+
+        .workout-card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2d3134;
+        }
+
+        .workout-card-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #606065;
+            margin-bottom: 4px;
+        }
+
+        .workout-card-trainer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .trainer-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e5e5ea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Members View */
         .members-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
+
+        .members-header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2d3134;
+        }
+
         .members-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
+
         .member-card {
             background: white;
             border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             display: flex;
             align-items: center;
             gap: 16px;
         }
+
+        .member-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e5e5ea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            color: #606065;
+            overflow: hidden;
+        }
+
+        .member-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .member-status {
+            font-size: 14px;
+            color: #606065;
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -175,24 +808,396 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
-            justify-content: center;
+            overflow-y: auto;
             align-items: center;
+            justify-content: center;
         }
+
         .modal.active {
             display: flex;
         }
+
         .modal-content {
             background: white;
             border-radius: 12px;
             width: 90%;
             max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            margin: 20px;
+        }
+
+        .modal-header {
             padding: 24px;
+            border-bottom: 1px solid #e5e5ea;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #606065;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f5f5fa;
+            color: #2d3134;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 24px;
+            border-top: 1px solid #e5e5ea;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e5e5ea;
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3674b5;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        /* Picture Upload */
+        .picture-upload-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .picture-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: #e5e5ea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            border: 3px solid #e5e5ea;
+            transition: all 0.2s;
+        }
+
+        #workoutPreview {
+            border-radius: 8px;
+            width: 100%;
+            height: 200px;
+        }
+
+        .picture-preview:hover {
+            border-color: #3674b5;
+        }
+
+        .picture-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .picture-preview-placeholder {
+            font-size: 48px;
+            font-weight: bold;
+            color: #606065;
+        }
+
+        .picture-upload-input {
+            display: none;
+        }
+
+        /* Participants Checkboxes */
+        .participants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 12px;
+            border: 1px solid #e5e5ea;
+            border-radius: 6px;
+        }
+
+        .participant-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .participant-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .participant-checkbox label {
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Loading & Empty States */
+        .loading,
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #606065;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            color: #2d3134;
+            margin-bottom: 8px;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background: #3674b5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(54, 116, 181, 0.3);
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(54, 116, 181, 0.4);
+        }
+
+        /* Admin Hint */
+        .admin-hint {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            padding: 8px 12px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .admin-hint.show {
+            opacity: 1;
+        }
+
+        /* Debug Panel */
+        .debug-panel {
+            position: fixed;
+            bottom: 60px;
+            left: 24px;
+            background: white;
+            border: 1px solid #e5e5ea;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
+            display: none;
+            max-width: 400px;
+        }
+
+        .debug-panel.show {
+            display: block;
+        }
+
+        .debug-info {
+            margin: 4px 0;
+        }
+
+        .debug-info strong {
+            color: #3674b5;
+        }
+
+        .test-result {
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .test-result.success {
+            background: #d1fae5;
+            color: #059669;
+            border: 1px solid #059669;
+        }
+
+        .test-result.error {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #dc2626;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                margin-bottom: 24px;
+            }
+
+            .sidebar-section {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                display: none;
+            }
+
+            .workouts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .workouts-filters {
+                flex-direction: column;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .nav-container {
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
         }
     </style>
 </head>
 <body>
+    <div id="loginContainer" class="login-container">
+        <div class="login-card">
+            <div class="login-logo">#theProgram</div>
+            <div class="login-subtitle">Select your profile to continue</div>
+            <div id="loginError" class="login-error"></div>
+            <div id="loginSuccess" class="login-success"></div>
+            <div id="loginContent">
+                <div class="form-group">
+                    <label class="form-label" for="loginMemberSelect">Choose Member:</label>
+                    <select id="loginMemberSelect" class="form-select">
+                        <option value="">Loading members...</option>
+                    </select>
+                </div>
+                <button id="loginBtn" class="btn btn-primary" onclick="handleLogin()" disabled>Continue</button>
+                <div style="margin-top: 16px; text-align: center; display: flex; gap: 8px;">
+                    <button class="btn btn-secondary" onclick="showSettingsPrompt()" style="flex: 1;">Change Script URL</button>
+                    <button class="btn btn-success" onclick="testDirectConnection()" style="flex: 1;">Test Connection</button>
+                </div>
+                
+                <div class="troubleshooting-section">
+                    <h4>Current Script URL:</h4>
+                    <div class="url-display" id="currentUrlDisplay">Not set</div>
+                    
+                    <h4 style="margin-top: 16px;">If you see "Failed to fetch":</h4>
+                    <ol>
+                        <li>Make sure your URL ends with <strong>/exec</strong> (not /dev)</li>
+                        <li>Verify deployment settings:
+                            <ul>
+                                <li>Execute as: <strong>Me</strong></li>
+                                <li>Who has access: <strong>Anyone</strong></li>
+                            </ul>
+                        </li>
+                        <li>Try opening the URL in a new tab first</li>
+                        <li>Try in incognito mode or different browser</li>
+                        <li>Re-deploy with a new version</li>
+                    </ol>
+                    
+                    <h4 style="margin-top: 16px;">Quick Actions:</h4>
+                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                        <button class="btn btn-secondary" onclick="copyUrlToClipboard()" style="font-size: 12px;">Copy URL</button>
+                        <button class="btn btn-secondary" onclick="openUrlInNewTab()" style="font-size: 12px;">Open URL in New Tab</button>
+                        <button class="btn btn-secondary" onclick="clearAndRestart()" style="font-size: 12px;">Clear & Restart</button>
+                    </div>
+                </div>
+            </div>
+            <div id="loginLoading" class="login-loading" style="display: none;">
+                Loading members, please wait...
+            </div>
+        </div>
+    </div>
+
     <div id="appContainer" style="display: none;">
         <nav>
             <div class="nav-container">
@@ -202,7 +1207,21 @@
                     <a class="nav-link" onclick="showView('workouts')">Workouts</a>
                     <a class="nav-link" onclick="showView('members')">Members</a>
                 </div>
-                <button class="btn btn-primary" onclick="showAddWorkout()">Add Workout</button>
+                <div class="nav-actions">
+                    <div class="user-menu">
+                        <button class="user-button" onclick="toggleUserMenu()">
+                            <div class="user-avatar-small" id="navUserAvatar"></div>
+                            <span id="navUserName"></span>
+                            <span style="font-size: 12px;">▼</span>
+                        </button>
+                        <div id="userDropdown" class="user-dropdown">
+                            <div class="user-dropdown-item" onclick="showSwitchUser()">👤 Switch User</div>
+                            <div class="user-dropdown-item" onclick="viewMyStats()">📊 My Stats</div>
+                            <div class="user-dropdown-item" onclick="logout()">🚪 Logout</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showAddWorkout()">Add Workout</button>
+                </div>
             </div>
         </nav>
 
@@ -214,67 +1233,1400 @@
                             <div class="profile-avatar" id="userAvatar"></div>
                             <h2 class="profile-name" id="userName"></h2>
                             <div class="profile-stats">
-                                <div class="stat-item"><span id="userWorkouts" class="stat-value">-</span><span class="stat-label">Workouts</span></div>
-                                <div class="stat-item"><span id="userTrainer" class="stat-value">-</span><span class="stat-label">As Trainer</span></div>
-                                <div class="stat-item"><span id="userTotal" class="stat-value">-</span><span class="stat-label">Total</span></div>
+                                <div class="stat-item">
+                                    <span id="userWorkouts" class="stat-value">-</span>
+                                    <span class="stat-label">Workouts</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span id="userTrainer" class="stat-value">-</span>
+                                    <span class="stat-label">As Trainer</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span id="userTotal" class="stat-value">-</span>
+                                    <span class="stat-label">Total</span>
+                                </div>
                             </div>
                         </div>
                     </aside>
-                    <section id="activityFeed" class="activity-feed"></section>
+                    <section id="activityFeed" class="activity-feed">
+                        <div class="loading">Loading recent activity...</div>
+                    </section>
+                    <aside>
+                        <div class="sidebar-section">
+                            <h3 class="sidebar-title">Top Members This Month</h3>
+                            <div id="topMembersList">
+                                <div class="loading">Loading...</div>
+                            </div>
+                        </div>
+                        
+                        <div class="sidebar-section">
+                            <h3 class="sidebar-title">This Month's Stats</h3>
+                            <div class="monthly-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value" id="monthlyWorkouts">-</span>
+                                    <span class="stat-label">Total Workouts</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="monthlyAvgParticipants">-</span>
+                                    <span class="stat-label">Avg Participants</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value" id="monthlyUniqueTrainers">-</span>
+                                    <span class="stat-label">Different Trainers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
             </div>
-            <div id="workoutsView" class="view-content"><h2>All Workouts</h2><div id="workoutsList"></div></div>
+
+            <div id="workoutsView" class="view-content">
+                <div class="workouts-header">
+                    <h1>Workouts</h1>
+                    
+                    <div class="workouts-filters">
+                        <div class="filter-group">
+                            <label class="filter-label">Search</label>
+                            <input type="search" id="workoutSearchInput" class="filter-input" 
+                                   placeholder="Search workouts..." onkeyup="filterWorkouts()">
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Type</label>
+                            <select id="workoutTypeFilter" class="filter-select" onchange="filterWorkouts()">
+                                <option value="">All Types</option>
+                                <option value="General">General</option>
+                                <option value="Strength">Strength</option>
+                                <option value="Cardio">Cardio</option>
+                                <option value="Flexibility">Flexibility</option>
+                                <option value="Circuit">Circuit</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Trainer</label>
+                            <select id="workoutTrainerFilter" class="filter-select" onchange="filterWorkouts()">
+                                <option value="">All Trainers</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label class="filter-label">Month</label>
+                            <input type="month" id="workoutMonthFilter" class="filter-input" 
+                                   onchange="filterWorkouts()">
+                        </div>
+                    </div>
+
+                    <div class="workouts-stats" id="workoutStats">
+                        <div class="stat-card">
+                            <span class="stat-value" id="totalWorkoutsCount">-</span>
+                            <span class="stat-label">Total Workouts</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="avgParticipantsCount">-</span>
+                            <span class="stat-label">Avg Participants</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="uniqueTrainersCount">-</span>
+                            <span class="stat-label">Different Trainers</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="myWorkoutsCount">-</span>
+                            <span class="stat-label">Your Participation</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="workoutsList" class="workouts-grid">
+                    <div class="loading">Loading workouts...</div>
+                </div>
+            </div>
+
             <div id="membersView" class="view-content">
                 <div class="members-header">
-                    <h2>All Members</h2>
+                    <h1>Members</h1>
                     <button class="btn btn-primary" onclick="showAddMember()">Add Member</button>
                 </div>
-                <div id="membersList" class="members-grid"></div>
+                <div id="membersList" class="members-grid">
+                    <div class="loading">Loading members...</div>
+                </div>
             </div>
         </main>
+
+        <button class="fab" onclick="showAddWorkout()">+</button>
+
+        <div class="admin-hint" id="adminHint">Press F2 for admin settings | F3 to test connection | F4 for debug info</div>
     </div>
 
-    <div id="addMemberModal" class="modal"> </div>
-    <div id="addWorkoutModal" class="modal"> </div>
-    <div id="loginContainer"> </div>
+    <div id="debugPanel" class="debug-panel">
+        <div style="font-weight: bold; margin-bottom: 8px;">Debug Info:</div>
+        <div class="debug-info"><strong>Script URL:</strong> <span id="debugScriptUrl">Not set</span></div>
+        <div class="debug-info"><strong>Current User ID:</strong> <span id="debugUserId">None</span></div>
+        <div class="debug-info"><strong>Members Loaded:</strong> <span id="debugMembersCount">0</span></div>
+        <div class="debug-info"><strong>Workouts Loaded:</strong> <span id="debugWorkoutsCount">0</span></div>
+        <div class="debug-info"><strong>Last Error:</strong> <span id="debugLastError">None</span></div>
+        <button class="btn btn-secondary" style="margin-top: 8px; font-size: 12px;" onclick="testConnectionDebug()">Test Connection</button>
+        <div id="debugTestResult" class="test-result" style="display: none;"></div>
+    </div>
+
+    <div id="addWorkoutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Workout</h2>
+                <button class="modal-close" onclick="closeModal('addWorkoutModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="workoutForm">
+                    <div class="picture-upload-container">
+                        <div id="workoutPreview" class="picture-preview" onclick="document.getElementById('workoutPictureUpload').click()">
+                            <div id="workoutPreviewPlaceholder" class="picture-preview-placeholder">📷</div>
+                            <img id="workoutPreviewImg" style="display: none;" alt="Workout preview">
+                        </div>
+                        <label class="form-label">Click to add workout photo</label>
+                        <input type="file" id="workoutPictureUpload" class="picture-upload-input" accept="image/*" 
+                               onchange="previewPicture(event, 'workoutPreviewImg', 'workoutPreviewPlaceholder', (dataUrl) => { selectedWorkoutPicture = dataUrl; })">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Date *</label>
+                            <input type="date" id="workoutDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Time *</label>
+                            <input type="time" id="workoutTime" class="form-input" value="06:00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Trainer *</label>
+                            <select id="workoutTrainer" class="form-select" required>
+                                <option value="">Select trainer...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Type *</label>
+                            <select id="workoutType" class="form-select">
+                                <option value="General">General</option>
+                                <option value="Strength">Strength</option>
+                                <option value="Cardio">Cardio</option>
+                                <option value="Flexibility">Flexibility</option>
+                                <option value="Circuit">Circuit</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" id="workoutLocation" class="form-input" value="LCHS">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Workout Title</label>
+                        <input type="text" id="workoutTitle" class="form-input" placeholder="e.g., Morning Strength Session">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Participants</label>
+                        <div id="participantsList" class="participants-grid"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="workoutDescription" class="form-textarea" 
+                                  placeholder="Brief description of the workout focus and activities"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addWorkoutModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveWorkoutBtn" onclick="saveWorkout()">Save Workout</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Member</h2>
+                <button class="modal-close" onclick="closeModal('addMemberModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="memberForm">
+                    <div class="picture-upload-container">
+                        <div class="picture-preview" onclick="document.getElementById('profileUpload').click()">
+                            <div id="profilePlaceholder" class="picture-preview-placeholder">?</div>
+                            <img id="profilePreviewImg" style="display: none;" alt="Profile preview">
+                        </div>
+                        <label class="form-label">Click to add profile picture</label>
+                        <input type="file" id="profileUpload" class="picture-upload-input" accept="image/*" 
+                               onchange="previewPicture(event, 'profilePreviewImg', 'profilePlaceholder', (dataUrl) => { selectedProfilePicture = dataUrl; updateProfilePlaceholder(); })">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" id="memberFirstName" class="form-input" required onkeyup="updateProfilePlaceholder()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" id="memberLastName" class="form-input" required onkeyup="updateProfilePlaceholder()">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="memberEmail" class="form-input">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" id="memberPhone" class="form-input">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Join Date</label>
+                            <input type="date" id="memberJoinDate" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select id="memberStatus" class="form-select">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea id="memberNotes" class="form-textarea" 
+                                  placeholder="Any additional notes about this member"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addMemberModal')">Cancel</button>
+                <button class="btn btn-primary" id="saveMemberBtn" onclick="saveMember()">Save Member</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="workoutDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="detailsModalTitle" class="modal-title"></h2>
+                <button class="modal-close" onclick="closeModal('workoutDetailsModal')">&times;</button>
+            </div>
+            <div id="detailsModalBody" class="modal-body"></div>
+        </div>
+    </div>
 
     <script>
-        // Your full, original JavaScript code that was working before should go here.
-        // This is a placeholder to show the structure.
+        // Global variables
+        let scriptUrl = localStorage.getItem('workoutTrackerScriptUrl');
+        let members = [], workouts = [];
+        let currentUserId = null, currentUserData = null;
+        let selectedProfilePicture = null, selectedWorkoutPicture = null;
+        let lastError = null;
 
-        // Placeholder functions to demonstrate the restored logic
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('App initializing...');
+            console.log('Script URL:', scriptUrl);
+            console.log('Current User ID:', localStorage.getItem('workoutTrackerUserId'));
+            
+            currentUserId = localStorage.getItem('workoutTrackerUserId');
+            
+            // Update debug panel and URL display
+            updateDebugPanel();
+            updateUrlDisplay();
+            
+            if (!scriptUrl) {
+                console.log('No script URL found, showing settings');
+                showSettings(true);
+            } else if (currentUserId) {
+                console.log('User ID found, initializing app');
+                initializeApp();
+            } else {
+                console.log('No user ID found, showing login');
+                showLogin();
+            }
+
+            // Show admin hint briefly
+            setTimeout(() => {
+                document.getElementById('adminHint').classList.add('show');
+                setTimeout(() => {
+                    document.getElementById('adminHint').classList.remove('show');
+                }, 3000);
+            }, 1000);
+        });
+
+        // Listen for function keys
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F2') {
+                e.preventDefault();
+                showSettings();
+            } else if (e.key === 'F3') {
+                e.preventDefault();
+                testConnection();
+            } else if (e.key === 'F4') {
+                e.preventDefault();
+                toggleDebugPanel();
+            }
+        });
+
+        // Debug functions
+        function updateDebugPanel() {
+            document.getElementById('debugScriptUrl').textContent = scriptUrl ? scriptUrl.substring(0, 40) + '...' : 'Not set';
+            document.getElementById('debugUserId').textContent = currentUserId || 'None';
+            document.getElementById('debugMembersCount').textContent = members.length;
+            document.getElementById('debugWorkoutsCount').textContent = workouts.length;
+            document.getElementById('debugLastError').textContent = lastError ? lastError.substring(0, 50) + '...' : 'None';
+        }
+
+        function updateUrlDisplay() {
+            const display = document.getElementById('currentUrlDisplay');
+            if (scriptUrl) {
+                display.textContent = scriptUrl;
+            } else {
+                display.textContent = 'Not set - Click "Change Script URL" to set';
+            }
+        }
+
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debugPanel');
+            panel.classList.toggle('show');
+        }
+
+        function copyUrlToClipboard() {
+            if (scriptUrl) {
+                navigator.clipboard.writeText(scriptUrl).then(() => {
+                    showLoginSuccess('URL copied to clipboard!');
+                }).catch(err => {
+                    alert('Failed to copy URL: ' + err);
+                });
+            } else {
+                alert('No URL to copy');
+            }
+        }
+
+        function openUrlInNewTab() {
+            if (scriptUrl) {
+                window.open(scriptUrl + '?action=getVersion', '_blank');
+            } else {
+                alert('No URL to open');
+            }
+        }
+
+        function clearAndRestart() {
+            if (confirm('This will clear all stored data and restart the app. Continue?')) {
+                localStorage.removeItem('workoutTrackerScriptUrl');
+                localStorage.removeItem('workoutTrackerUserId');
+                location.reload();
+            }
+        }
+
+        async function testDirectConnection() {
+            if (!scriptUrl) {
+                showLoginError('No script URL set. Please set the URL first.');
+                return;
+            }
+
+            const testResultDiv = document.getElementById('debugTestResult');
+            testResultDiv.style.display = 'block';
+            testResultDiv.className = 'test-result';
+            testResultDiv.textContent = 'Testing connection...';
+
+            try {
+                // Test 1: Basic fetch
+                const response = await fetch(scriptUrl + '?action=getVersion');
+                const text = await response.text();
+                
+                if (response.ok) {
+                    showLoginSuccess('Connection successful! Version: ' + text);
+                    testResultDiv.className = 'test-result success';
+                    testResultDiv.textContent = 'Connection OK! Response: ' + text;
+                    
+                    // Try loading members
+                    setTimeout(() => loadMembersForLogin(), 1000);
+                } else {
+                    throw new Error('HTTP ' + response.status + ': ' + text);
+                }
+            } catch (error) {
+                console.error('Direct connection test error:', error);
+                showLoginError('Connection failed: ' + error.message);
+                testResultDiv.className = 'test-result error';
+                testResultDiv.textContent = 'Connection failed: ' + error.message + '\n\nTry opening the URL in a new tab first.';
+            }
+        }
+
+        async function testConnectionDebug() {
+            const testResultDiv = document.getElementById('debugTestResult');
+            testResultDiv.style.display = 'block';
+            testResultDiv.className = 'test-result';
+            testResultDiv.textContent = 'Running tests...\n';
+            
+            if (!scriptUrl) {
+                testResultDiv.className = 'test-result error';
+                testResultDiv.textContent = 'No script URL set!';
+                return;
+            }
+            
+            try {
+                // Test 1: Version check
+                testResultDiv.textContent += '\n1. Testing version endpoint...';
+                const versionResponse = await fetch(scriptUrl + '?action=getVersion');
+                const versionText = await versionResponse.text();
+                testResultDiv.textContent += '\n   ✓ Version: ' + versionText;
+                
+                // Test 2: Get members
+                testResultDiv.textContent += '\n\n2. Testing getMembers...';
+                const membersResponse = await fetch(scriptUrl + '?action=getMembers');
+                const membersText = await membersResponse.text();
+                const membersData = JSON.parse(membersText);
+                testResultDiv.textContent += '\n   ✓ Members: ' + (membersData.members ? membersData.members.length : 0);
+                
+                // Test 3: Get workouts
+                testResultDiv.textContent += '\n\n3. Testing getWorkouts...';
+                const workoutsResponse = await fetch(scriptUrl + '?action=getWorkouts');
+                const workoutsText = await workoutsResponse.text();
+                const workoutsData = JSON.parse(workoutsText);
+                testResultDiv.textContent += '\n   ✓ Workouts: ' + (workoutsData.workouts ? workoutsData.workouts.length : 0);
+                
+                testResultDiv.className = 'test-result success';
+                testResultDiv.textContent += '\n\nAll tests passed! ✓';
+                
+            } catch (error) {
+                testResultDiv.className = 'test-result error';
+                testResultDiv.textContent += '\n\nError: ' + error.message;
+                testResultDiv.textContent += '\n\nFull error: ' + error.stack;
+            }
+        }
+
+        // Initialize app
+        async function initializeApp() {
+            console.log('Initializing app...');
+            document.getElementById('appContainer').style.display = 'block';
+            document.getElementById('loginContainer').style.display = 'none';
+            
+            try {
+                const [membersData, workoutsData] = await Promise.all([
+                    runScript('getMembers'),
+                    runScript('getWorkouts')
+                ]);
+                
+                console.log('Members data:', membersData);
+                console.log('Workouts data:', workoutsData);
+                
+                if (membersData && membersData.members) {
+                    members = membersData.members;
+                    console.log('Loaded', members.length, 'members');
+                }
+                
+                if (workoutsData && workoutsData.workouts) {
+                    workouts = workoutsData.workouts;
+                    console.log('Loaded', workouts.length, 'workouts');
+                }
+
+                currentUserData = members.find(m => m.id == currentUserId);
+                if (!currentUserData) {
+                    console.error('Current user not found in members list');
+                    showLogin();
+                    return;
+                }
+
+                updateDebugPanel();
+                updateUIForUser();
+                populateTrainerDropdown();
+                populateDashboard();
+                showView('dashboard');
+                
+                // Set current month as default filter
+                const now = new Date();
+                const monthFilter = document.getElementById('workoutMonthFilter');
+                monthFilter.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+                
+            } catch (error) {
+                console.error('Initialization error:', error);
+                lastError = error.message;
+                updateDebugPanel();
+                alert('Failed to load data. Please check your connection.\n\nError: ' + error.message);
+            }
+        }
+
+        // Login handling
+        async function handleLogin() {
+            const memberId = document.getElementById('loginMemberSelect').value;
+            if (!memberId) {
+                showLoginError('Please select a member');
+                return;
+            }
+            
+            console.log('Logging in as member ID:', memberId);
+            localStorage.setItem('workoutTrackerUserId', memberId);
+            currentUserId = memberId;
+            await initializeApp();
+        }
+
+        function showLogin() {
+            console.log('Showing login screen');
+            document.getElementById('appContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('loginSuccess').style.display = 'none';
+            document.getElementById('loginContent').style.display = 'block';
+            document.getElementById('loginLoading').style.display = 'none';
+            
+            updateUrlDisplay();
+            loadMembersForLogin();
+        }
+
+        async function loadMembersForLogin() {
+            console.log('Loading members for login...');
+            const loginBtn = document.getElementById('loginBtn');
+            const select = document.getElementById('loginMemberSelect');
+            
+            select.innerHTML = '<option value="">Loading members...</option>';
+            loginBtn.disabled = true;
+            
+            try {
+                const data = await runScript('getMembers');
+                console.log('Members loaded:', data);
+                
+                if (data && data.members && data.members.length > 0) {
+                    const activeMembers = data.members.filter(m => m.status === 'Active');
+                    console.log('Active members:', activeMembers.length);
+                    
+                    if (activeMembers.length === 0) {
+                        showLoginError('No active members found. Please add members first.');
+                        select.innerHTML = '<option value="">No active members</option>';
+                        return;
+                    }
+                    
+                    select.innerHTML = 
+                        '<option value="">Select your name...</option>' +
+                        activeMembers.map(m => 
+                            `<option value="${m.id}">${m.firstName} ${m.lastName}</option>`
+                        ).join('');
+                    
+                    loginBtn.disabled = false;
+                    showLoginSuccess('Members loaded successfully!');
+                } else {
+                    showLoginError('No members found. Please check your spreadsheet setup.');
+                    select.innerHTML = '<option value="">No members found</option>';
+                }
+            } catch (error) {
+                console.error('Error loading members:', error);
+                lastError = error.message;
+                updateDebugPanel();
+                
+                if (error.message.includes('Failed to fetch')) {
+                    showLoginError('Failed to connect. Please check the troubleshooting steps below.');
+                } else if (error.message.includes('JSON')) {
+                    showLoginError('Invalid response from server. The script may not be deployed correctly.');
+                } else {
+                    showLoginError('Error: ' + error.message);
+                }
+                
+                select.innerHTML = '<option value="">Error loading members</option>';
+            }
+        }
+
+        function showLoginError(message) {
+            const errorDiv = document.getElementById('loginError');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('loginSuccess').style.display = 'none';
+        }
+
+        function showLoginSuccess(message) {
+            const successDiv = document.getElementById('loginSuccess');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        function showSettingsPrompt() {
+            showSettings();
+        }
+
+        // Update UI for current user - FIXED VERSION
+        function updateUIForUser() {
+            const name = `${currentUserData.firstName} ${currentUserData.lastName}`;
+            const initials = getInitials(name);
+            const picUrl = currentUserData.profilePictureURL;
+
+            // Select both avatar elements
+            const navAvatar = document.getElementById('navUserAvatar');
+            const dashboardAvatar = document.getElementById('userAvatar');
+
+            // This is a more robust helper function to set the avatar
+            function setAvatar(element, url, text) {
+                // Always start by clearing previous content
+                element.innerHTML = ''; 
+                
+                // Check for a valid, non-empty URL
+                if (url && url.startsWith('http')) {
+                    // Create a new image element
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = text;
+                    // Append the new image
+                    element.appendChild(img);
+                } else {
+                    // If no valid URL, just show the initials as text
+                    element.textContent = text;
+                }
+            }
+
+            // Update both the navigation and dashboard avatars
+            setAvatar(navAvatar, picUrl, initials);
+            setAvatar(dashboardAvatar, picUrl, initials);
+
+            // Update the user's name in the UI
+            document.getElementById('navUserName').textContent = name;
+            document.getElementById('userName').textContent = name;
+        }
+
+        // View switching
         function showView(viewName) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
             document.getElementById(`${viewName}View`).classList.add('active');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             document.querySelector(`.nav-link[onclick="showView('${viewName}')"]`).classList.add('active');
 
-            // This is the important part that populates the content
             switch(viewName) {
                 case 'dashboard':
-                    // populateDashboard();
+                    populateDashboard();
                     break;
                 case 'workouts':
-                    // populateWorkouts();
+                    populateWorkouts();
+                    populateTrainerFilter();
+                    updateWorkoutStats();
                     break;
                 case 'members':
-                    // populateMembers();
+                    populateMembers();
                     break;
             }
         }
-        
-        function showAddMember() {
-            console.log("Showing Add Member Modal");
-            // Your logic to open the modal, e.g., by adding a class:
-            // document.getElementById('addMemberModal').classList.add('active');
+
+        // Dashboard
+        function populateDashboard() {
+            const feed = document.getElementById('activityFeed');
+            const recentWorkouts = workouts.slice(0, 10);
+            
+            feed.innerHTML = recentWorkouts.map(workout => `
+                <div class="activity-card" onclick="showWorkoutDetails(${workout.id})">
+                    ${workout.workoutPictureURL ? 
+                        `<div class="activity-image-header" style="background-image: url('${workout.workoutPictureURL}')"></div>` : ''}
+                    <div class="activity-content">
+                        <h3 class="activity-title">${workout.notes || workout.type + ' Workout'}</h3>
+                        <div class="activity-meta">
+                            <span>${formatDate(workout.date)}</span>
+                            <span class="activity-type type-${workout.type.toLowerCase()}">${workout.type}</span>
+                            <span>👥 ${workout.participantCount} participants</span>
+                        </div>
+                        <p style="margin-top: 8px; color: #606065;">
+                            Led by <strong>${workout.trainer}</strong> at ${workout.location}
+                        </p>
+                        ${workout.participants.length > 0 ? `
+                            <div class="activity-participants">
+                                <div class="participants-label">Participants:</div>
+                                <div class="participants-list">
+                                    ${workout.participants.map(p => 
+                                        `<span class="participant-chip">${p}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('') || '<div class="empty-state"><h3>No recent workouts</h3><p>Add your first workout to get started!</p></div>';
+            
+            // Load user stats
+            runScript('getMember', `id=${currentUserId}`).then(data => {
+                if (data && data.stats) {
+                    document.getElementById('userWorkouts').textContent = data.stats.asParticipant || 0;
+                    document.getElementById('userTrainer').textContent = data.stats.asTrainer || 0;
+                    document.getElementById('userTotal').textContent = data.stats.totalWorkouts || 0;
+                }
+            }).catch(error => {
+                console.error('Error loading user stats:', error);
+                lastError = error.message;
+                updateDebugPanel();
+            });
+
+            // Calculate and display monthly stats
+            const currentMonth = new Date();
+            const monthlyWorkouts = workouts.filter(w => {
+                const workoutDate = new Date(w.date);
+                return workoutDate.getMonth() === currentMonth.getMonth() && 
+                       workoutDate.getFullYear() === currentMonth.getFullYear();
+            });
+
+            document.getElementById('monthlyWorkouts').textContent = monthlyWorkouts.length;
+            
+            if (monthlyWorkouts.length > 0) {
+                const avgParticipants = (monthlyWorkouts.reduce((sum, w) => sum + w.participantCount, 0) / monthlyWorkouts.length).toFixed(1);
+                document.getElementById('monthlyAvgParticipants').textContent = avgParticipants;
+                
+                const uniqueTrainers = new Set(monthlyWorkouts.map(w => w.trainer)).size;
+                document.getElementById('monthlyUniqueTrainers').textContent = uniqueTrainers;
+            } else {
+                document.getElementById('monthlyAvgParticipants').textContent = '0';
+                document.getElementById('monthlyUniqueTrainers').textContent = '0';
+            }
+
+            // Calculate top members for this month
+            const memberParticipation = {};
+            monthlyWorkouts.forEach(workout => {
+                // Count trainer participation
+                if (!memberParticipation[workout.trainer]) {
+                    memberParticipation[workout.trainer] = { name: workout.trainer, asTrainer: 0, asParticipant: 0, total: 0 };
+                }
+                memberParticipation[workout.trainer].asTrainer++;
+                memberParticipation[workout.trainer].total++;
+
+                // Count participant participation
+                workout.participants.forEach(participant => {
+                    if (!memberParticipation[participant]) {
+                        memberParticipation[participant] = { name: participant, asTrainer: 0, asParticipant: 0, total: 0 };
+                    }
+                    memberParticipation[participant].asParticipant++;
+                    memberParticipation[participant].total++;
+                });
+            });
+
+            // Sort by total participation and get top 5
+            const topMembers = Object.values(memberParticipation)
+                .sort((a, b) => b.total - a.total)
+                .slice(0, 5);
+
+            // Display top members
+            const topMembersList = document.getElementById('topMembersList');
+            if (topMembers.length > 0) {
+                topMembersList.innerHTML = topMembers.map(member => {
+                    const memberData = members.find(m => `${m.firstName} ${m.lastName}` === member.name);
+                    const initials = getInitials(member.name);
+                    const avatarHtml = memberData && memberData.profilePictureURL
+                        ? `<img src="${memberData.profilePictureURL}" alt="${initials}">`
+                        : initials;
+
+                    return `
+                        <div class="member-item">
+                            <div class="member-item-avatar">${avatarHtml}</div>
+                            <div class="member-item-info">
+                                <div class="member-item-name">${member.name}</div>
+                                <div class="member-item-stats">${member.total} workouts</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                topMembersList.innerHTML = '<p style="text-align: center; color: #606065; font-size: 14px;">No activity this month</p>';
+            }
+        }
+
+        // Workouts View
+        function populateWorkouts() {
+            filterWorkouts();
+        }
+
+        function filterWorkouts() {
+            const searchTerm = document.getElementById('workoutSearchInput').value.toLowerCase();
+            const typeFilter = document.getElementById('workoutTypeFilter').value;
+            const trainerFilter = document.getElementById('workoutTrainerFilter').value;
+            const monthFilter = document.getElementById('workoutMonthFilter').value;
+
+            let filtered = workouts;
+
+            // Apply filters
+            if (searchTerm) {
+                filtered = filtered.filter(w => 
+                    (w.notes && w.notes.toLowerCase().includes(searchTerm)) ||
+                    w.trainer.toLowerCase().includes(searchTerm) ||
+                    w.participants.some(p => p.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            if (typeFilter) {
+                filtered = filtered.filter(w => w.type === typeFilter);
+            }
+
+            if (trainerFilter) {
+                filtered = filtered.filter(w => w.trainer === trainerFilter);
+            }
+
+            if (monthFilter) {
+                const [year, month] = monthFilter.split('-');
+                filtered = filtered.filter(w => {
+                    const date = new Date(w.date);
+                    return date.getFullYear() === parseInt(year) && 
+                           date.getMonth() === parseInt(month) - 1;
+                });
+            }
+
+            // Render filtered workouts
+            const list = document.getElementById('workoutsList');
+            list.innerHTML = filtered.map(w => {
+                const trainer = members.find(m => `${m.firstName} ${m.lastName}` === w.trainer);
+                const trainerInitials = getInitials(w.trainer);
+                
+                return `
+                    <div class="workout-card" onclick="showWorkoutDetails(${w.id})">
+                        <div class="workout-card-image" 
+                             style="${w.workoutPictureURL ? `background-image: url('${w.workoutPictureURL}')` : 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}">
+                            <span class="workout-card-type type-${w.type.toLowerCase()}">${w.type}</span>
+                        </div>
+                        <div class="workout-card-content">
+                            <div class="workout-card-date">${formatDate(w.date)} at ${formatTime(w.time)}</div>
+                            <h3 class="workout-card-title">${w.notes || w.type + ' Workout'}</h3>
+                            <div class="workout-card-info">
+                                <div class="workout-card-trainer">
+                                    <div class="trainer-avatar">${trainerInitials}</div>
+                                    <span>${w.trainer}</span>
+                                </div>
+                                <span>👥 ${w.participantCount}</span>
+                            </div>
+                            ${w.participants.length > 0 ? `
+                                <div class="activity-participants">
+                                    <div class="participants-label">Participants:</div>
+                                    <div class="participants-list">
+                                        ${w.participants.slice(0, 5).map(p => 
+                                            `<span class="participant-chip">${p}</span>`
+                                        ).join('')}
+                                        ${w.participants.length > 5 ? 
+                                            `<span class="participant-chip">+${w.participants.length - 5} more</span>` : ''}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<div class="empty-state"><h3>No workouts found</h3><p>Try adjusting your filters or add a new workout.</p></div>';
+
+            updateWorkoutStats(filtered);
+        }
+
+        function updateWorkoutStats(filteredWorkouts = workouts) {
+            // Calculate stats
+            const totalWorkouts = filteredWorkouts.length;
+            const avgParticipants = totalWorkouts > 0 
+                ? (filteredWorkouts.reduce((sum, w) => sum + w.participantCount, 0) / totalWorkouts).toFixed(1)
+                : 0;
+            const uniqueTrainers = new Set(filteredWorkouts.map(w => w.trainer)).size;
+            const myWorkouts = filteredWorkouts.filter(w => 
+                w.participants.includes(`${currentUserData.firstName} ${currentUserData.lastName}`) ||
+                w.trainer === `${currentUserData.firstName} ${currentUserData.lastName}`
+            ).length;
+
+            // Update UI
+            document.getElementById('totalWorkoutsCount').textContent = totalWorkouts;
+            document.getElementById('avgParticipantsCount').textContent = avgParticipants;
+            document.getElementById('uniqueTrainersCount').textContent = uniqueTrainers;
+            document.getElementById('myWorkoutsCount').textContent = myWorkouts;
+        }
+
+        function populateTrainerFilter() {
+            const trainers = [...new Set(workouts.map(w => w.trainer))].sort();
+            document.getElementById('workoutTrainerFilter').innerHTML = 
+                '<option value="">All Trainers</option>' +
+                trainers.map(t => `<option value="${t}">${t}</option>`).join('');
+        }
+
+        // Members View
+        function populateMembers() {
+            const list = document.getElementById('membersList');
+            list.innerHTML = members.map(m => {
+                const initials = getInitials(m.firstName + ' ' + m.lastName);
+                const avatarHtml = m.profilePictureURL 
+                    ? `<img src="${m.profilePictureURL}" alt="${initials}">`
+                    : initials;
+                
+                return `
+                    <div class="member-card">
+                        <div class="member-avatar">${avatarHtml}</div>
+                        <div class="member-info">
+                            <div class="member-name">${m.firstName} ${m.lastName}</div>
+                            <div class="member-status">${m.status} • Joined ${formatDate(m.joinDate)}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Modals
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
         }
 
         function showAddWorkout() {
-            console.log("Showing Add Workout Modal");
+            document.getElementById('workoutForm').reset();
+            document.getElementById('workoutDate').valueAsDate = new Date();
+            selectedWorkoutPicture = null;
+            document.getElementById('workoutPreviewImg').style.display = 'none';
+            document.getElementById('workoutPreviewPlaceholder').style.display = 'block';
+            populateTrainerDropdown();
+            openModal('addWorkoutModal');
         }
-        
-        console.log("App script loaded. Remember to use your full script for all functionality.");
 
+        function showAddMember() {
+            document.getElementById('memberForm').reset();
+            document.getElementById('memberJoinDate').valueAsDate = new Date();
+            selectedProfilePicture = null;
+            document.getElementById('profilePreviewImg').style.display = 'none';
+            document.getElementById('profilePlaceholder').style.display = 'block';
+            document.getElementById('profilePlaceholder').textContent = '?';
+            openModal('addMemberModal');
+        }
+
+        function populateTrainerDropdown() {
+            const activeMembers = members.filter(m => m.status === 'Active');
+            document.getElementById('workoutTrainer').innerHTML = 
+                '<option value="">Select trainer...</option>' +
+                activeMembers.map(m => 
+                    `<option value="${m.id}">${m.firstName} ${m.lastName}</option>`
+                ).join('');
+            
+            document.getElementById('participantsList').innerHTML = 
+                activeMembers.map(m => `
+                    <div class="participant-checkbox">
+                        <input type="checkbox" id="participant_${m.id}" value="${m.id}">
+                        <label for="participant_${m.id}">${m.firstName} ${m.lastName}</label>
+                    </div>
+                `).join('');
+        }
+
+        // Workout Details
+        async function showWorkoutDetails(workoutId) {
+            const modalBody = document.getElementById('detailsModalBody');
+            modalBody.innerHTML = '<div class="loading">Loading...</div>';
+            openModal('workoutDetailsModal');
+
+            const workout = workouts.find(w => w.id == workoutId);
+            const details = await runScript('getWorkoutDetails', `workoutId=${workoutId}`);
+            
+            document.getElementById('detailsModalTitle').textContent = workout.notes || (workout.type + ' Workout');
+            
+            let detailsHtml = '';
+            
+            if (workout.workoutPictureURL) {
+                detailsHtml += `<img src="${workout.workoutPictureURL}" style="width: 100%; max-height: 300px; object-fit: cover; border-radius: 8px; margin-bottom: 20px;">`;
+            }
+            
+            detailsHtml += `
+                <div style="display: grid; gap: 16px;">
+                    <div>
+                        <strong>Date:</strong> ${formatDate(workout.date)} at ${formatTime(workout.time)}
+                    </div>
+                    <div>
+                        <strong>Type:</strong> <span class="activity-type type-${workout.type.toLowerCase()}">${workout.type}</span>
+                    </div>
+                    <div>
+                        <strong>Trainer:</strong> ${workout.trainer}
+                    </div>
+                    <div>
+                        <strong>Location:</strong> ${workout.location}
+                    </div>
+                    ${details && details.details && details.details.description ? `
+                        <div>
+                            <strong>Description:</strong><br>
+                            <p style="margin-top: 8px; white-space: pre-wrap;">${details.details.description}</p>
+                        </div>
+                    ` : ''}
+                    ${workout.participants.length > 0 ? `
+                        <div>
+                            <strong>Participants (${workout.participantCount}):</strong><br>
+                            <div style="margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px;">
+                                ${workout.participants.map(p => 
+                                    `<span style="padding: 4px 12px; background: #e5e5ea; border-radius: 16px; font-size: 14px;">${p}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            modalBody.innerHTML = detailsHtml;
+        }
+
+        // Save functions
+        async function saveWorkout() {
+            const saveBtn = document.getElementById('saveWorkoutBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            const workoutData = {
+                date: document.getElementById('workoutDate').value,
+                time: document.getElementById('workoutTime').value,
+                trainerId: document.getElementById('workoutTrainer').value,
+                type: document.getElementById('workoutType').value,
+                location: document.getElementById('workoutLocation').value,
+                notes: document.getElementById('workoutTitle').value,
+                participantIds: Array.from(document.querySelectorAll('#participantsList input:checked')).map(cb => cb.value),
+                details: {
+                    description: document.getElementById('workoutDescription').value
+                }
+            };
+
+            try {
+                console.log('Saving workout data:', workoutData);
+                const result = await runScript('addWorkout', null, workoutData);
+                console.log('Workout save result:', result);
+                
+                if (!result || !result.success) throw new Error(result.error || 'Failed to save workout.');
+
+                let picUploadSuccess = true;
+                if (selectedWorkoutPicture) {
+                    saveBtn.textContent = 'Uploading Picture...';
+                    try {
+                        console.log('Uploading workout picture, size:', selectedWorkoutPicture.length);
+                        const picResult = await runScript('updateWorkoutPicture', null, { 
+                            workoutId: result.workoutId, 
+                            imageData: selectedWorkoutPicture 
+                        });
+                        console.log('Picture upload result:', picResult);
+                        
+                        if (!picResult || !picResult.success) {
+                            console.error('Picture upload failed:', picResult);
+                            picUploadSuccess = false;
+                            alert('Workout saved successfully but picture upload failed. You can try adding the picture later.');
+                        }
+                    } catch (picError) {
+                        console.error('Picture upload error:', picError);
+                        picUploadSuccess = false;
+                        alert('Workout saved successfully but picture upload failed: ' + picError.message);
+                    }
+                }
+                
+                closeModal('addWorkoutModal');
+                
+                // Reload data
+                try {
+                    await initializeApp();
+                    showView('workouts');
+                } catch (reloadError) {
+                    console.error('Error reloading data:', reloadError);
+                    // If reload fails, still close modal and show success
+                    alert('Workout saved successfully! Please refresh the page to see the update.');
+                }
+                
+            } catch(error) {
+                console.error('Save workout error:', error);
+                lastError = error.message;
+                updateDebugPanel();
+                alert('Error: ' + error.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Workout';
+            }
+        }
+
+        async function saveMember() {
+            const saveBtn = document.getElementById('saveMemberBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            const memberData = {
+                firstName: document.getElementById('memberFirstName').value.trim(),
+                lastName: document.getElementById('memberLastName').value.trim(),
+                email: document.getElementById('memberEmail').value.trim(),
+                phone: document.getElementById('memberPhone').value.trim(),
+                joinDate: document.getElementById('memberJoinDate').value,
+                status: document.getElementById('memberStatus').value,
+                notes: document.getElementById('memberNotes').value.trim()
+            };
+
+            try {
+                console.log('Saving member data:', memberData);
+                const result = await runScript('addMember', null, memberData);
+                console.log('Member save result:', result);
+                
+                if (!result || !result.success) throw new Error(result.error || 'Failed to save member.');
+
+                let picUploadSuccess = true;
+                if (selectedProfilePicture) {
+                    saveBtn.textContent = 'Uploading Picture...';
+                    try {
+                        console.log('Uploading profile picture, size:', selectedProfilePicture.length);
+                        const picResult = await runScript('updateMemberProfilePicture', null, { 
+                            memberId: result.memberId, 
+                            imageData: selectedProfilePicture 
+                        });
+                        console.log('Picture upload result:', picResult);
+                        
+                        if (!picResult || !picResult.success) {
+                            console.error('Picture upload failed:', picResult);
+                            picUploadSuccess = false;
+                            alert('Member saved successfully but picture upload failed. You can try adding the picture later.');
+                        }
+                    } catch (picError) {
+                        console.error('Picture upload error:', picError);
+                        picUploadSuccess = false;
+                        alert('Member saved successfully but picture upload failed: ' + picError.message);
+                    }
+                }
+                
+                closeModal('addMemberModal');
+                
+                // Reload data
+                try {
+                    await initializeApp();
+                    showView('members');
+                } catch (reloadError) {
+                    console.error('Error reloading data:', reloadError);
+                    // If reload fails, still close modal and show success
+                    alert('Member saved successfully! Please refresh the page to see the update.');
+                }
+                
+            } catch(error) {
+                console.error('Save member error:', error);
+                lastError = error.message;
+                updateDebugPanel();
+                alert('Error: ' + error.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Member';
+            }
+        }
+
+        // Utility functions
+        async function runScript(action, params = null, payload = null) {
+            let url = `${scriptUrl}?action=${action}`;
+            if (params) url += `&${params}`;
+            
+            const options = { 
+                method: payload ? 'POST' : 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            };
+            if (payload) options.body = JSON.stringify({ action, data: payload });
+            
+            console.log(`Running script: ${action}`, { url, payload });
+            
+            try {
+                const response = await fetch(url, options);
+                const responseText = await response.text();
+                console.log(`Response for ${action}:`, responseText);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}, response: ${responseText}`);
+                }
+                
+                try {
+                    return JSON.parse(responseText);
+                } catch (parseError) {
+                    console.error('JSON parse error:', parseError);
+                    throw new Error(`Invalid JSON response: ${responseText}`);
+                }
+            } catch (error) {
+                console.error('Script run error:', error);
+                lastError = error.message;
+                updateDebugPanel();
+                throw error;
+            }
+        }
+
+        function showSettings(isInitial = false) {
+            const message = isInitial 
+                ? 'Welcome! Please enter your Google Apps Script URL to get started:\n\nYou can find this URL by:\n1. Opening your Google Apps Script\n2. Deploy → Manage deployments\n3. Copy the Web app URL (ends with /exec)'
+                : 'Enter your Google Apps Script URL:';
+            
+            const url = prompt(message, scriptUrl || '');
+            if (url && url.trim()) {
+                scriptUrl = url.trim();
+                localStorage.setItem('workoutTrackerScriptUrl', scriptUrl);
+                location.reload();
+            } else if (isInitial) {
+                // If this is initial setup and they cancel, show the prompt again
+                setTimeout(() => showSettings(true), 100);
+            }
+        }
+
+        // Test connection function
+        async function testConnection() {
+            console.log('Testing connection to:', scriptUrl);
+            
+            try {
+                // Test 1: Basic connection
+                console.log('Test 1: Testing basic connection...');
+                const testResponse = await fetch(scriptUrl + '?action=getVersion');
+                const testText = await testResponse.text();
+                console.log('Basic connection response:', testText);
+                
+                // Test 2: Get members
+                console.log('Test 2: Testing getMembers...');
+                const membersResult = await runScript('getMembers');
+                console.log('Members result:', membersResult);
+                
+                // Test 3: Get workouts
+                console.log('Test 3: Testing getWorkouts...');
+                const workoutsResult = await runScript('getWorkouts');
+                console.log('Workouts result:', workoutsResult);
+                
+                alert(`Connection Test Results:\n\n` +
+                      `1. Basic Connection: ${testResponse.ok ? 'SUCCESS' : 'FAILED'}\n` +
+                      `2. Get Members: ${membersResult && membersResult.members ? 'SUCCESS (' + membersResult.members.length + ' members)' : 'FAILED'}\n` +
+                      `3. Get Workouts: ${workoutsResult && workoutsResult.workouts ? 'SUCCESS (' + workoutsResult.workouts.length + ' workouts)' : 'FAILED'}\n\n` +
+                      `Script URL: ${scriptUrl}\n\n` +
+                      `Check the browser console (F12) for detailed logs.`);
+                      
+            } catch (error) {
+                console.error('Connection test failed:', error);
+                lastError = error.message;
+                updateDebugPanel();
+                
+                alert(`Connection Test Failed!\n\n` +
+                      `Error: ${error.message}\n\n` +
+                      `Please check:\n` +
+                      `1. Your Google Apps Script is deployed as Web App\n` +
+                      `2. Execute as: "Me"\n` +
+                      `3. Who has access: "Anyone"\n` +
+                      `4. The URL is correct and ends with /exec\n\n` +
+                      `Current URL: ${scriptUrl}\n\n` +
+                      `Try opening the URL in a new tab first.`);
+            }
+        }
+
+        function showSwitchUser() {
+            localStorage.removeItem('workoutTrackerUserId');
+            location.reload();
+        }
+
+        function viewMyStats() {
+            toggleUserMenu();
+            showView('dashboard');
+        }
+
+        function logout() {
+            localStorage.removeItem('workoutTrackerUserId');
+            location.reload();
+        }
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('active');
+            
+            // Close on outside click
+            if (dropdown.classList.contains('active')) {
+                setTimeout(() => {
+                    document.addEventListener('click', function closeDropdown(e) {
+                        if (!e.target.closest('.user-menu')) {
+                            dropdown.classList.remove('active');
+                            document.removeEventListener('click', closeDropdown);
+                        }
+                    });
+                }, 0);
+            }
+        }
+
+        function getInitials(name) {
+            if (!name) return '?';
+            return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+
+        function formatTime(timeStr) {
+            if (!timeStr) return '';
+            const [hours, minutes] = timeStr.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+
+        function previewPicture(event, previewImgId, placeholderId, callback) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (file.size > 5 * 1024 * 1024) {
+                alert('File size must be less than 5MB');
+                event.target.value = '';
+                return;
+            }
+            
+            console.log('Selected file:', file.name, 'Size:', file.size, 'Type:', file.type);
+            
+            const reader = new FileReader();
+            reader.onload = e => {
+                const img = new Image();
+                img.onload = () => {
+                    const maxSize = 800;
+                    let { width, height } = img;
+                    
+                    console.log('Original image dimensions:', width, 'x', height);
+                    
+                    if (width > maxSize || height > maxSize) {
+                        if (width > height) {
+                            height *= maxSize / width;
+                            width = maxSize;
+                        } else {
+                            width *= maxSize / height;
+                            height = maxSize;
+                        }
+                    }
+                    
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                    
+                    console.log('Resized image dimensions:', width, 'x', height);
+                    console.log('Data URL length:', dataUrl.length);
+                    
+                    // Check if the data URL is valid
+                    if (!dataUrl.startsWith('data:image/')) {
+                        alert('Error processing image. Please try a different image.');
+                        return;
+                    }
+                    
+                    document.getElementById(previewImgId).src = dataUrl;
+                    document.getElementById(previewImgId).style.display = 'block';
+                    if (placeholderId) {
+                        document.getElementById(placeholderId).style.display = 'none';
+                    }
+                    callback(dataUrl);
+                };
+                img.onerror = () => {
+                    alert('Error loading image. Please try a different image.');
+                };
+                img.src = e.target.result;
+            };
+            reader.onerror = () => {
+                alert('Error reading file. Please try again.');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateProfilePlaceholder() {
+            if (selectedProfilePicture) return;
+            
+            const firstName = document.getElementById('memberFirstName').value.trim();
+            const lastName = document.getElementById('memberLastName').value.trim();
+            const placeholder = document.getElementById('profilePlaceholder');
+            
+            if (firstName || lastName) {
+                const initials = getInitials(`${firstName} ${lastName}`);
+                placeholder.textContent = initials;
+            } else {
+                placeholder.textContent = '?';
+            }
+        }
     </script>
 </body>
 </html>
