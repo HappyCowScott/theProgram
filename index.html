@@ -60,7 +60,6 @@
             background: #3674b5;
             color: white;
         }
-        /* Dashboard Layout */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 2fr; /* 1/3 and 2/3 width */
@@ -74,7 +73,7 @@
             text-align: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             position: sticky;
-            top: 80px; /* (Nav height + padding) */
+            top: 80px;
         }
         .profile-avatar {
             width: 120px;
@@ -115,7 +114,6 @@
             font-size: 14px;
             color: #606065;
         }
-        /* Activity Feed */
         .activity-feed {
             display: flex;
             flex-direction: column;
@@ -138,13 +136,39 @@
         .activity-title {
             font-size: 20px;
             font-weight: 600;
+            margin-bottom: 4px;
         }
         .activity-meta {
             font-size: 14px;
             color: #606065;
-            margin-top: 4px;
+            margin-bottom: 16px;
         }
-        /* Other essential styles */
+        /* New styles for participants list */
+        .participants-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e5ea;
+        }
+        .participants-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3134;
+        }
+        .participants-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .participants-list li {
+            font-size: 13px;
+            background-color: #f0f2f5;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
         .view-content { display: none; }
         .view-content.active { display: block; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
@@ -216,10 +240,14 @@
     <script>
         // NOTE: This script uses dummy data for demonstration.
         // Your real app would connect to your Google Apps Script.
-        const members = [{id: 999, firstName: 'Scott', lastName: 'Metcalf', profilePictureURL: ''}];
+        const members = [
+            {id: 999, firstName: 'Scott', lastName: 'Metcalf', profilePictureURL: ''},
+            {id: 101, firstName: 'Charlie', lastName: 'Handsome', profilePictureURL: ''},
+            {id: 102, firstName: 'Parker', lastName: 'Posey', profilePictureURL: ''}
+        ];
         const workouts = [
-            {id: 1, trainer: 'Scott Metcalf', notes: 'Strength Workout', date: '2025-07-01', time: '08:00', workoutPictureURL: ''},
-            {id: 2, trainer: 'Scott Metcalf', notes: 'Morning Cardio', date: '2025-06-30', time: '07:00', workoutPictureURL: ''},
+            {id: 1, trainer: 'Scott Metcalf', notes: 'Strength Workout', date: '2025-07-01', time: '08:00', workoutPictureURL: '', participants: ['Charlie Handsome', 'Parker Posey'], participantCount: 2},
+            {id: 2, trainer: 'Charlie Handsome', notes: 'Morning Cardio', date: '2025-06-30', time: '07:00', workoutPictureURL: '', participants: ['Scott Metcalf'], participantCount: 1},
         ];
         const currentUserData = members[0];
 
@@ -246,9 +274,19 @@
                 <div class="activity-card">
                     <h3 class="activity-title">${workout.notes || 'Workout'}</h3>
                     <p class="activity-meta">
-                        by <strong>${workout.trainer}</strong> on ${new Date(workout.date).toLocaleDateString()} at ${workout.time}
+                        Led by <strong>${workout.trainer}</strong> on ${new Date(workout.date).toLocaleDateString()}
                     </p>
+
                     ${workout.workoutPictureURL ? `<img src="${workout.workoutPictureURL}" class="activity-card-image">` : ''}
+
+                    ${workout.participantCount > 0 ? `
+                        <div class="participants-section">
+                            <h4>Participants (${workout.participantCount})</h4>
+                            <ul class="participants-list">
+                                ${workout.participants.map(p => `<li>${p}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
                 </div>
             `).join('');
         }
