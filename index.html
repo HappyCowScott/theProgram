@@ -74,36 +74,20 @@
             gap: 12px;
             align-items: center;
         }
-
-        /* Buttons */
-        .btn {
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            text-decoration: none;
-            display: inline-block;
+        
+        /* Main Container & Views */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px;
         }
 
-        .btn-primary {
-            background: #3674b5;
-            color: white;
+        .view-content {
+            display: none;
         }
 
-        .btn-primary:hover {
-            background: #2a5a8f;
-        }
-
-        .btn-secondary {
-            background: #e5e5ea;
-            color: #2d3134;
-        }
-
-        .btn-secondary:hover {
-            background: #d5d5da;
+        .view-content.active {
+            display: block;
         }
         
         /* Dashboard Layout */
@@ -250,14 +234,82 @@
             margin-top: 16px;
             max-height: 400px;
             object-fit: cover;
+            cursor: pointer;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            overflow-y: auto;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* Other styles remain the same */
+        .modal.active {
+            display: flex;
+        }
 
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            margin: 20px;
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid #e5e5ea;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #606065;
+        }
+
+        /* Other styles for forms, buttons etc. can be kept from previous versions */
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; margin-bottom: 8px; font-weight: 500; font-size: 14px; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 12px; border: 1px solid #e5e5ea; border-radius: 6px; font-size: 16px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .participants-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; max-height: 200px; overflow-y: auto; padding: 12px; border: 1px solid #e5e5ea; border-radius: 6px; }
+        .picture-upload-container { text-align: center; }
+        .picture-preview { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 16px; background: #e5e5ea; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
+        #workoutPreview { border-radius: 8px; width: 100%; height: 200px; }
+        .picture-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .picture-preview-placeholder { font-size: 48px; color: #606065; }
+        .picture-upload-input { display: none; }
+        .modal-body { padding: 24px; }
+        .modal-footer { padding: 24px; border-top: 1px solid #e5e5ea; display: flex; gap: 12px; justify-content: flex-end; }
+        .btn { padding: 10px 20px; border-radius: 6px; font-size: 16px; font-weight: 500; cursor: pointer; border: none; }
+        .btn-primary { background: #3674b5; color: white; }
+        .btn-secondary { background: #e5e5ea; color: #2d3134; }
+        
     </style>
 </head>
 <body>
-    <div id="appContainer" style="display: none;">
+    <div id="appContainer" style="display: block;">
         <nav>
             <div class="nav-container">
                 <a href="#" class="logo">#theProgram</a>
@@ -273,8 +325,7 @@
                             <span id="navUserName"></span>
                             <span style="font-size: 12px;">▼</span>
                         </button>
-                        <div id="userDropdown" class="user-dropdown">
-                            <div class="user-dropdown-item" onclick="showSwitchUser()">👤 Switch User</div>
+                        <div id="userDropdown" class="user-dropdown" style="display: none;">
                             <div class="user-dropdown-item" onclick="logout()">🚪 Logout</div>
                         </div>
                     </div>
@@ -307,12 +358,12 @@
                         </div>
                     </aside>
                     <section id="activityFeed" class="activity-feed">
-                        <div class="loading">Loading recent activity...</div>
-                    </section>
+                        </section>
                 </div>
             </div>
-
-            </main>
+            <div id="workoutsView" class="view-content">Workouts view content</div>
+            <div id="membersView" class="view-content">Members view content</div>
+        </main>
     </div>
 
     <div id="addWorkoutModal" class="modal">
@@ -368,8 +419,7 @@
 
                     <div class="form-group">
                         <label class="form-label">Description / Details</label>
-                        <textarea id="workoutDescription" class="form-textarea" 
-                                  placeholder="Brief description of the workout focus and activities"></textarea>
+                        <textarea id="workoutDescription" class="form-textarea" placeholder="Brief description of the workout"></textarea>
                     </div>
                     
                     <div class="picture-upload-container">
@@ -378,8 +428,7 @@
                             <img id="workoutPreviewImg" style="display: none;" alt="Workout preview">
                         </div>
                         <label class="form-label">Click to add a photo</label>
-                        <input type="file" id="workoutPictureUpload" class="picture-upload-input" accept="image/*" 
-                               onchange="previewPicture(event, 'workoutPreviewImg', 'workoutPreviewPlaceholder', (dataUrl) => { selectedWorkoutPicture = dataUrl; })">
+                        <input type="file" id="workoutPictureUpload" class="picture-upload-input" accept="image/*" onchange="previewPicture(event, 'workoutPreviewImg', 'workoutPreviewPlaceholder', (dataUrl) => { selectedWorkoutPicture = dataUrl; })">
                     </div>
                 </form>
             </div>
@@ -391,146 +440,32 @@
     </div>
     
     <script>
-        // Global variables
-        let scriptUrl = localStorage.getItem('workoutTrackerScriptUrl');
-        let members = [], workouts = [];
-        let currentUserId = null, currentUserData = null;
-        let selectedProfilePicture = null, selectedWorkoutPicture = null;
-        let lastError = null;
+        // --- Hardcoded dummy data for demonstration without a real backend ---
+        // In your real app, these would be populated by the 'initializeApp' function
+        let scriptUrl = 'https://your-script-url.example.com';
+        let members = [
+            {id: 999, firstName: 'Scott', lastName: 'Metcalf', status: 'Active', profilePictureURL: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='},
+            {id: 1, firstName: 'Charlie', lastName: 'Handsome', status: 'Active', profilePictureURL: ''},
+        ];
+        let workouts = [
+            {id: 1, date: '2025-07-01', time: '07:30', trainerId: 999, trainer: 'Scott Metcalf', type: 'Strength', location: 'LCHS', notes: 'Strength Workout', participantIds: ['1'], participantCount: 1, workoutPictureURL: ''},
+            {id: 2, date: '2025-06-30', time: '06:00', trainerId: 1, trainer: 'Charlie Handsome', type: 'Run', location: 'The Track', notes: 'Morning Run', participantIds: ['999'], participantCount: 1, workoutPictureURL: ''},
+        ];
+        let currentUserId = 999;
+        let currentUserData = members.find(m => m.id == currentUserId);
+        let selectedWorkoutPicture = null;
+        // --- End of dummy data ---
 
-        // Initialize
+        // Initialize App on Load
         document.addEventListener('DOMContentLoaded', () => {
-            currentUserId = localStorage.getItem('workoutTrackerUserId');
-            if (scriptUrl && currentUserId) {
-                initializeApp();
-            } else {
-                // Login logic will handle showing the login screen
-            }
+            // This is where you would normally call your backend
+            // For this demo, we'll just populate the views with the dummy data
+            updateUIForUser();
+            populateDashboard();
         });
 
-        // SIMPLIFIED saveWorkout function
-        async function saveWorkout() {
-            const saveBtn = document.getElementById('saveWorkoutBtn');
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'Saving...';
-
-            const workoutData = {
-                date: document.getElementById('workoutDate').value,
-                time: document.getElementById('workoutTime').value,
-                trainerId: document.getElementById('workoutTrainer').value,
-                type: document.getElementById('workoutType').value,
-                location: document.getElementById('workoutLocation').value,
-                notes: document.getElementById('workoutTitle').value, // Title goes into notes
-                participantIds: Array.from(document.querySelectorAll('#participantsList input:checked')).map(cb => cb.value),
-                details: {
-                    description: document.getElementById('workoutDescription').value
-                }
-            };
-
-            try {
-                const result = await runScript('addWorkout', null, workoutData);
-                if (!result || !result.success) throw new Error(result.error || 'Failed to save workout.');
-
-                if (selectedWorkoutPicture) {
-                    saveBtn.textContent = 'Uploading Picture...';
-                    await runScript('updateWorkoutPicture', null, { 
-                        workoutId: result.workoutId, 
-                        imageData: selectedWorkoutPicture 
-                    });
-                }
-                
-                closeModal('addWorkoutModal');
-                await initializeApp(); // Reload all data
-                showView('dashboard');  // Go to the dashboard to see the new post
-                
-            } catch(error) {
-                console.error('Save workout error:', error);
-                alert('Error: ' + error.message);
-            } finally {
-                saveBtn.disabled = false;
-                saveBtn.textContent = 'Save Workout';
-            }
-        }
-
-        // UPDATED populateDashboard function with new layout
-        function populateDashboard() {
-            const feed = document.getElementById('activityFeed');
-            // Sort by date descending before slicing
-            const recentWorkouts = workouts.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 15);
-            
-            feed.innerHTML = recentWorkouts.map(workout => {
-                const trainerData = members.find(m => m.id == workout.trainerId);
-                let trainerAvatarHtml = getInitials(workout.trainer);
-                if (trainerData && trainerData.profilePictureURL) {
-                    trainerAvatarHtml = `<img src="${trainerData.profilePictureURL}" alt="${trainerAvatarHtml}">`;
-                }
-                
-                return `
-                <div class="activity-card">
-                    <div class="activity-card-avatar">${trainerAvatarHtml}</div>
-                    <div class="activity-card-main">
-                        <div class="activity-card-header">
-                            <strong class="activity-card-user">${workout.trainer}</strong>
-                            <span class="activity-card-meta">
-                                ${formatDate(workout.date)} at ${formatTime(workout.time)}
-                            </span>
-                        </div>
-                        <a href="#" class="activity-card-title" onclick="event.preventDefault(); showWorkoutDetails(${workout.id})">
-                            ${workout.notes || workout.type + ' Workout'}
-                        </a>
-                        
-                        ${workout.workoutPictureURL ? `
-                            <img src="${workout.workoutPictureURL}" class="activity-card-image" alt="Workout Image">
-                        ` : ''}
-                    </div>
-                </div>
-                `;
-            }).join('') || '<div class="empty-state"><h3>No recent workouts</h3><p>Add your first workout to get started!</p></div>';
-            
-            // User stats logic remains the same
-            runScript('getMember', `id=${currentUserId}`).then(data => {
-                if (data && data.stats) {
-                    document.getElementById('userWorkouts').textContent = data.stats.asParticipant || 0;
-                    document.getElementById('userTrainer').textContent = data.stats.asTrainer || 0;
-                    document.getElementById('userTotal').textContent = data.stats.totalWorkouts || 0;
-                }
-            });
-        }
-
-        // --- All other JavaScript functions remain the same ---
-        // (The full script is included here to ensure a complete, working file)
-        
-        async function initializeApp() {
-            document.getElementById('appContainer').style.display = 'block';
-            // Any login container logic would be here...
-            
-            try {
-                const [membersData, workoutsData] = await Promise.all([
-                    runScript('getMembers'),
-                    runScript('getWorkouts')
-                ]);
-                
-                members = membersData.members;
-                workouts = workoutsData.workouts;
-                currentUserData = members.find(m => m.id == currentUserId);
-
-                if (!currentUserData) {
-                    console.error('Current user not found. Logging out.');
-                    logout();
-                    return;
-                }
-
-                updateUIForUser();
-                populateTrainerDropdown();
-                showView('dashboard');
-                
-            } catch (error) {
-                console.error('Initialization error:', error);
-                alert('Failed to load data. Please check your connection or script URL.\n\nError: ' + error.message);
-            }
-        }
-        
         function updateUIForUser() {
+            if (!currentUserData) return;
             const name = `${currentUserData.firstName} ${currentUserData.lastName}`;
             const initials = getInitials(name);
             const picUrl = currentUserData.profilePictureURL;
@@ -551,59 +486,107 @@
             setAvatar(document.getElementById('userAvatar'), picUrl, initials);
             document.getElementById('navUserName').textContent = name;
             document.getElementById('userName').textContent = name;
+            
+            // Dummy stats
+            document.getElementById('userWorkouts').textContent = 1;
+            document.getElementById('userTrainer').textContent = 1;
+            document.getElementById('userTotal').textContent = 2;
         }
+
+        function populateDashboard() {
+            const feed = document.getElementById('activityFeed');
+            const recentWorkouts = workouts.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 15);
+            
+            feed.innerHTML = recentWorkouts.map(workout => {
+                const trainerData = members.find(m => m.id == workout.trainerId);
+                let trainerAvatarHtml = getInitials(workout.trainer);
+                if (trainerData && trainerData.profilePictureURL && trainerData.profilePictureURL.startsWith('data')) {
+                    trainerAvatarHtml = `<img src="${trainerData.profilePictureURL}" alt="${trainerAvatarHtml}">`;
+                }
+                
+                return `
+                <div class="activity-card">
+                    <div class="activity-card-avatar">${trainerAvatarHtml}</div>
+                    <div class="activity-card-main">
+                        <div class="activity-card-header">
+                            <strong class="activity-card-user">${workout.trainer}</strong>
+                            <span class="activity-card-meta">
+                                ${formatDate(workout.date)} at ${formatTime(workout.time)}
+                            </span>
+                        </div>
+                        <a href="#" class="activity-card-title" onclick="event.preventDefault(); alert('Showing details for workout ${workout.id}')">
+                            ${workout.notes || workout.type + ' Workout'}
+                        </a>
+                        
+                        ${workout.workoutPictureURL ? `
+                            <img src="${workout.workoutPictureURL}" class="activity-card-image" alt="Workout Image" onclick="alert('Showing details for workout ${workout.id}')">
+                        ` : ''}
+                    </div>
+                </div>
+                `;
+            }).join('') || '<p>No recent workouts found.</p>';
+        }
+
+        function saveWorkout() {
+            alert('Saving workout... (demo)');
+            closeModal('addWorkoutModal');
+        }
+
+        // --- Utility Functions ---
+        function showView(viewName) { 
+            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+            document.getElementById(`${viewName}View`).classList.add('active');
+            if(viewName === 'dashboard') populateDashboard();
+        }
+
+        function populateTrainerDropdown() {
+             const select = document.getElementById('workoutTrainer');
+             select.innerHTML = members.map(m => `<option value="${m.id}">${m.firstName} ${m.lastName}</option>`).join('');
+        }
+
+        function showAddWorkout() { 
+            document.getElementById('workoutForm').reset();
+            populateTrainerDropdown();
+            openModal('addWorkoutModal');
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        function toggleUserMenu() { 
+            const menu = document.getElementById('userDropdown');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+        
+        function logout() { alert('Logging out... (demo)'); }
 
         function getInitials(name) {
             if (!name) return '?';
             return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
         }
 
-        async function runScript(action, params = null, payload = null) {
-            let url = `${scriptUrl}?action=${action}`;
-            if (params) url += `&${params}`;
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            // This handles the timezone offset to prevent showing the previous day
+            const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+            return new Date(date.getTime() + userTimezoneOffset).toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+
+        function formatTime(timeStr) {
+            if (!timeStr) return '';
+            const [hours, minutes] = timeStr.split(':');
+            if(isNaN(hours) || isNaN(minutes)) return timeStr; // Failsafe
             
-            const options = { 
-                method: payload ? 'POST' : 'GET',
-                mode: 'cors',
-                headers: {'Content-Type': 'text/plain'}
-            };
-            if (payload) options.body = JSON.stringify({ action, data: payload });
-            
-            const response = await fetch(url, options);
-            const responseText = await response.text();
-            
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}, response: ${responseText}`);
-            
-            try {
-                return JSON.parse(responseText);
-            } catch (parseError) {
-                throw new Error(`Invalid JSON response: ${responseText}`);
-            }
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12; // Converts 0 or 12 to 12
+            return `${displayHour}:${minutes} ${ampm}`;
         }
         
-        // --- Dummy functions for brevity, keep your original full functions ---
-        function showView(viewName) { 
-            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
-            document.getElementById(`${viewName}View`).classList.add('active');
-            if(viewName === 'dashboard') populateDashboard();
-        }
-        function populateTrainerDropdown() { /* Keep your original */ }
-        function showWorkoutDetails(id) { alert('Showing details for workout ' + id); }
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function showAddWorkout() { 
-            document.getElementById('workoutForm').reset();
-            populateTrainerDropdown();
-            openModal('addWorkoutModal');
-        }
-        function toggleUserMenu() { /* Keep your original */ }
-        function showSwitchUser() { logout(); }
-        function logout() { 
-            localStorage.removeItem('workoutTrackerUserId');
-            location.reload();
-        }
-        function formatDate(d) { return new Date(d).toLocaleDateString(); }
-        function formatTime(t) { return t; }
         function previewPicture(event, imgId, placeholderId, callback) { 
             const file = event.target.files[0];
             if(!file) return;
@@ -612,7 +595,7 @@
                 document.getElementById(imgId).src = e.target.result;
                 document.getElementById(imgId).style.display = 'block';
                 document.getElementById(placeholderId).style.display = 'none';
-                callback(e.target.result);
+                if(callback) callback(e.target.result);
             };
             reader.readAsDataURL(file);
         }
